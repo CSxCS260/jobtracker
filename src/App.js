@@ -6,7 +6,7 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import Home from "./pages";
+import Home from "./pages/index";
 import EntryForm from "./pages/entry-form";
 
 function App() {
