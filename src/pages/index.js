@@ -6,21 +6,15 @@ import { Menu, Transition} from '@headlessui/react'
 // Icons from Heroicons
  
 const Home = () => {
-    const currentDate = new Date();
-    const formattedDate = currentDate.getFullYear() + '-' + currentDate.getMonth() + 1 + '-' + currentDate.getDate();
+//     const currentDate = new Date();
+//     const formattedDate = currentDate.getFullYear() + '-' + currentDate.getMonth() + 1 + '-' + currentDate.getDate();
+    // const FileSystem = require("fs");
+    const _ = require("lodash");
 
     const greetings = ["Greetings", "Hi", "Hi there", "Howdy", "Hiya", "G'day", "Welcome", "Hello there", "Hey", "Hope your day's going well"];
     const randomGreeting = greetings[Date.now()%greetings.length]
 
-    const [formData, setFormData] = useState({
-        company: null,
-        location: null,
-        link: null,
-        progress: null,
-        date: null,
-        status: null,
-        details: null
-      });
+    const [formData, setFormData] = useState(null);
 
     var rows = tempData.map(function(application) {
         return (<tr className="flex flex-col md:flex-row odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-t dark:border-gray-700 py-5">
@@ -81,7 +75,7 @@ const Home = () => {
         </tr>)
     });
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault(); // Prevents the default form submission behavior (page refresh)
         
         setFormData({
@@ -101,20 +95,37 @@ const Home = () => {
             details: 7
         });
 
-        console.log('Form submitted with data:', formData);
-        console.log('Also', tempData)
+        const newData = {
+            company: document.getElementById('company').value,
+            location: document.getElementById('location').value,
+            link: document.getElementById('link').value,
+            progress: document.getElementById('progress').value,
+            date: document.getElementById('date').value,
+            status: document.getElementById('status').value,
+            details: document.getElementById('details').value
+        }
+
+        const gfg = _(newData).toJSON();
+        if (formData != null){
+            console.log('Form submitted with data:', formData);
+            console.log('Also', tempData);
+            console.log('Also, also', document.getElementById('company').value, 
+                        document.getElementById('location').value,
+                        document.getElementById('link').value,
+                        document.getElementById('progress').value,
+                        document.getElementById('date').value,
+                        document.getElementById('status').value,
+                        document.getElementById('details').value);
         // You can send the form data to an API or perform other actions
-    
-        // Optionally, reset the form after submission
-        setFormData({
-            company: null,
-            location: null,
-            link: null,
-            progress: null,
-            date: null,
-            status: null,
-            details: null
-        });
+        }
+        else {
+            console.log("bad news boss");
+            tempData.push(gfg);
+            console.log('at least you got', tempData);
+        }
+        // // Optionally, reset the form after submission
+        // setFormData(null);
+        
       };
 
 
@@ -248,31 +259,6 @@ const Home = () => {
                                     </Menu.Items>
                                 </Transition>
                             </Menu>
-                            <div id="filterDropdown" class="z-10 hidden w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700">
-                                <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">Choose brand</h6>
-                                <ul class="space-y-2 text-sm" aria-labelledby="filterDropdownButton">
-                                    <li class="flex items-center">
-                                        <input id="apple" type="checkbox" value="" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"/>
-                                        <label for="apple" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">Apple (56)</label>
-                                    </li>
-                                    <li class="flex items-center">
-                                        <input id="fitbit" type="checkbox" value="" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"/>
-                                        <label for="fitbit" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">Microsoft (16)</label>
-                                    </li>
-                                    <li class="flex items-center">
-                                        <input id="razor" type="checkbox" value="" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"/>
-                                        <label for="razor" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">Razor (49)</label>
-                                    </li>
-                                    <li class="flex items-center">
-                                        <input id="nikon" type="checkbox" value="" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"/>
-                                        <label for="nikon" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">Nikon (12)</label>
-                                    </li>
-                                    <li class="flex items-center">
-                                        <input id="benq" type="checkbox" value="" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"/>
-                                        <label for="benq" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">BenQ (74)</label>
-                                    </li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -323,7 +309,7 @@ const Home = () => {
                                 <tr id='new' className="flex flex-col md:flex-row odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-t dark:border-gray-700 py-5">
                                     <td className="p-2 w-[10%]"><input className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"type="text" id="company" name="Company" placeholder="e.g. &quot;Google&quot;"/></td>
                                     <td className="p-2 w-[10%]"><input className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"type="text" id="location" name="Location" placeholder="e.g. &quot;Mountain View, CA&quot;"/></td>
-                                    <td className="p-2 w-[20%]"><input className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' type="search" id="link" name="Link" placeholder="e.g. &quot;www.google.com/jobs/123&quot;"/></td>
+                                    <td className="p-2 w-[20%]"><input className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' type="text" id="link" name="Link" placeholder="e.g. &quot;www.google.com/jobs/123&quot;"/></td>
                                     <td className="p-2 w-[10%]"><input className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' type="text" id="progress" name="Progress" placeholder="e.g. &quot;Submitted&quot;"/></td>
                                     <td className="p-2 w-[10%]"><input className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' type="date" id="date" name="Date"/></td>
                                     <td className="p-2 w-[10%]"><input className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' type="text" id="status" name="Status" placeholder="e.g. &quot;Interview&quot;"/></td>
